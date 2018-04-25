@@ -7,7 +7,7 @@ class DigestClient {
     this.user = user
     this.password = password
     this.nonceRaw = 'abcdef0123456789'
-    this.digest = { nc: 1 }
+    this.digest = { nc: 0 }
     this.hasAuth = false
 
     this.logger = logger
@@ -33,15 +33,18 @@ class DigestClient {
 
   addAuth (url, options) {
     if (!this.hasAuth) return options
+    if (this.logger) this.logger.info(`requesting with auth carried`)
+    const _url = url.replace('//', '')
+    const uri = _url.indexOf('/') == -1 ? '/' : _url.slice(_url.indexOf('/'))
     const method = options.method ? options.method.toUpperCase() : 'GET'
     const ha1 = cryptojs.MD5(`${this.user}:${this.digest.realm}:${this.password}`).toString()
-		const ha2 = cryptojs.MD5(`${options.method || 'GET'}:${url}`).toString()
+		const ha2 = cryptojs.MD5(`${options.method || 'GET'}:${uri}`).toString()
     const ncString = ('00000000'+this.digest.nc).slice(-8)
-		const response = cryptojs.MD5(`${ha1}:${this.digest.nonce}:${ncString}:${this.digest.cnonce}:{this.digest.qop}:${ha2}`).toString()
-    const opaqueString = this.digest.opaque? `opaque="${this.digest.opaque}",` : ','
+		const response = cryptojs.MD5(`${ha1}:${this.digest.nonce}:${ncString}:${this.digest.cnonce}:${this.digest.qop}:${ha2}`).toString()
+    const opaqueString = this.digest.opaque? `opaque="${this.digest.opaque}",` : ''
     const digest = `${this.digest.scheme} username="${this.user}",realm="${this.digest.realm}",\
-nonce="${this.digest.nonce}",uri="${url}",response="${response}",${opaqueString}\
-qop=${this.digest.qop},nc=${ncString},cnonce="${this.digest.cnonce}"`
+nonce="${this.digest.nonce}",uri="${uri}",${opaqueString}\
+qop=${this.digest.qop},algorithm="MD5",response="${response}",nc=${ncString},cnonce="${this.digest.cnonce}"`
     options.headers = options.headers || {}
     options.headers.Authorization = digest
     if (this.logger) {
@@ -80,7 +83,7 @@ qop=${this.digest.qop},nc=${ncString},cnonce="${this.digest.cnonce}"`
     this.digest.nc++
   }
 
-  makeNonce (length=16) {
+  makeNonce (length=8) {
     let uid = ''
     for (let i = 0; i < length; ++i) {
       uid += this.nonceRaw[Math.floor(Math.random() * this.nonceRaw.length)];
