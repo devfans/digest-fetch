@@ -4,7 +4,7 @@
 [![Build Status][travis-image]][travis-url]
 [![Test Coverage][coveralls-image]][coveralls-url]
 
-digest auth request plugin for fetch/node-fetch
+digest auth request plugin for fetch/node-fetch.
 
 ## Installation
 ```
