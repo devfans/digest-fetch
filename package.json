@@ -1,6 +1,6 @@
 {
   "name": "digest-fetch",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "digest auth request plugin for fetch/node-fetch",
   "main": "digest-fetch-src.js",
   "scripts": {

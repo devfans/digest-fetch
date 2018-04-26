@@ -49,7 +49,6 @@ qop=${this.digest.qop},algorithm="MD5",response="${response}",nc=${ncString},cno
     options.headers.Authorization = digest
     if (this.logger) {
       this.logger.info(options)
-      this.logger.info(this.lastAuth)
     }
 		return options;
   }
