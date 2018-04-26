@@ -20,11 +20,22 @@ npm install digest-fetch
 ## Get Started
 ```
 const DigestFetch = require('digest-fetch')
-const client = DigestFetch('user', 'password', console) // console as logger, optional parameter
+
+// console as logger, optional parameter
+const client = DigestFetch('user', 'password', console) 
+
 // do request same way as fetch or node-fetch
 const url = ''
 const options = {}
 client.fetch(url, options)
+  .then(resp=>resp.json())
+  .then(data=>console.log(data))
+  .catch(e=>console.error(e))
+
+// pass in refresh request options function for conditions options needs be refreshed when trying again.
+// etc: when posting with file stream
+const renew = () => { body: fs.createReadStream('path-to-file') }
+client.fetch(url, {renew})
   .then(resp=>resp.json())
   .then(data=>console.log(data))
   .catch(e=>console.error(e))

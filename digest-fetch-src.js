@@ -32,6 +32,7 @@ class DigestClient {
   }
 
   addAuth (url, options) {
+    if (typeof(options.renew) == 'function') options = options.renew()
     if (!this.hasAuth) return options
     if (this.logger) this.logger.info(`requesting with auth carried`)
     const _url = url.replace('//', '')
