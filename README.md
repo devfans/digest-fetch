@@ -34,7 +34,7 @@ client.fetch(url, options)
 
 // pass in refresh request options function for conditions options needs be refreshed when trying again.
 // etc: when posting with file stream
-const renew = () => { body: fs.createReadStream('path-to-file') }
+const renew = () => { return { method: 'post', body: fs.createReadStream('path-to-file') } }
 client.fetch(url, {renew})
   .then(resp=>resp.json())
   .then(data=>console.log(data))
