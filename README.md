@@ -20,9 +20,13 @@ npm install digest-fetch
 ## Get Started
 ```
 const DigestFetch = require('digest-fetch')
+const digestOptions = {
+  cnonceSize: 32,  // length of cnonce, default: 32
+  logger: console, // logger for debug, default: none
+  algorithm: 'MD5' // only 'MD5' is supported now
+}
 
-// console as logger, optional parameter
-const client = DigestFetch('user', 'password', console) 
+const client = DigestFetch('user', 'password', digestOptions) 
 
 // do request same way as fetch or node-fetch
 const url = ''
@@ -34,7 +38,7 @@ client.fetch(url, options)
 
 // pass in refresh request options function for conditions options needs be refreshed when trying again.
 // etc: when posting with file stream
-const renew = () => { return { method: 'post', body: fs.createReadStream('path-to-file') } }
+const renew = () => ({ method: 'post', body: fs.createReadStream('path-to-file') })
 client.fetch(url, {renew})
   .then(resp=>resp.json())
   .then(data=>console.log(data))
