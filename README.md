@@ -11,10 +11,8 @@ digest auth request plugin for fetch/node-fetch.
 // dependencies for node
 npm install crypto-js node-fetch
 
-// dependencies for browser
-<script src='path-to-crypto-js.js'></script>
-
-npm install digest-fetch
+// for browers, if to use it directly, please indcude file `digest-fetch.js` in a <script/> 
+<script type="application/javascript" src="path-to-digest-fetch.js'></script>
 ```
 
 ## Get Started
@@ -36,10 +34,10 @@ client.fetch(url, options)
   .then(data=>console.log(data))
   .catch(e=>console.error(e))
 
-// pass in refresh request options function for conditions options needs be refreshed when trying again.
+// pass in refresh request options factory function for conditions options needs be refreshed when trying again.
 // etc: when posting with file stream
-const renew = () => ({ method: 'post', body: fs.createReadStream('path-to-file') })
-client.fetch(url, {renew})
+const factory = () => ({ method: 'post', body: fs.createReadStream('path-to-file') })
+client.fetch(url, {factory})
   .then(resp=>resp.json())
   .then(data=>console.log(data))
   .catch(e=>console.error(e))

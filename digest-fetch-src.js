@@ -1,6 +1,7 @@
 const canRequire = typeof(require) == 'function'
 if (typeof(fetch) !== 'function' && canRequire) var fetch = require('node-fetch')
-if (typeof(cryptojs) !== 'function' && canRequire) var cryptojs = require('crypto-js')
+// if (typeof(cryptojs) !== 'function' && canRequire) var cryptojs = require('crypto-js')
+const cryptojs = require('crypto-js')
 
 class DigestClient {
   constructor(user, password, options={}) {
@@ -33,16 +34,16 @@ class DigestClient {
   }
 
   addAuth (url, options) {
-    if (typeof(options.renew) == 'function') options = options.renew()
+    if (typeof(options.factory) == 'function') options = options.factory()
     if (!this.hasAuth) return options
     if (this.logger) this.logger.info(`requesting with auth carried`)
     const _url = url.replace('//', '')
     const uri = _url.indexOf('/') == -1 ? '/' : _url.slice(_url.indexOf('/'))
     const method = options.method ? options.method.toUpperCase() : 'GET'
     const ha1 = cryptojs.MD5(`${this.user}:${this.digest.realm}:${this.password}`).toString()
-		const ha2 = cryptojs.MD5(`${method}:${uri}`).toString()
+    const ha2 = cryptojs.MD5(`${method}:${uri}`).toString()
     const ncString = ('00000000'+this.digest.nc).slice(-8)
-		const response = cryptojs.MD5(`${ha1}:${this.digest.nonce}:${ncString}:${this.digest.cnonce}:${this.digest.qop}:${ha2}`).toString()
+    const response = cryptojs.MD5(`${ha1}:${this.digest.nonce}:${ncString}:${this.digest.cnonce}:${this.digest.qop}:${ha2}`).toString()
     const opaqueString = this.digest.opaque? `opaque="${this.digest.opaque}",` : ''
     const digest = `${this.digest.scheme} username="${this.user}",realm="${this.digest.realm}",\
 nonce="${this.digest.nonce}",uri="${uri}",${opaqueString}\
@@ -52,11 +53,11 @@ qop=${this.digest.qop},algorithm="{this.digest.algorithm}",response="${response}
     if (this.logger) {
       this.logger.info(options)
     }
-    // const {renew, ..._options} = options
+    // const {factory, ..._options} = options
     const _options = {}
     Object.assign(_options, options)
-    delete _options.renew
-		return _options;
+    delete _options.factory
+    return _options;
   }
 
   async parseAuth (data) {
