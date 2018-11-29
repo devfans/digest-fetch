@@ -1,6 +1,6 @@
 {
   "name": "digest-fetch",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "digest auth request plugin for fetch/node-fetch",
   "main": "digest-fetch-src.js",
   "scripts": {
@@ -28,6 +28,8 @@
     "after": "^0.8.2",
     "babel-loader": "^8.0.4",
     "eslint": "^5.9.0",
+    "istanbul": "^1.1.0-alpha.1",
+    "mocha": "^5.2.0",
     "node-fetch": "^2.3.0",
     "webpack": "^4.26.1",
     "webpack-cli": "^3.1.2"

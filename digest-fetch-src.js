@@ -61,10 +61,10 @@ qop=${this.digest.qop},algorithm="{this.digest.algorithm}",response="${response}
   }
 
   async parseAuth (data) {
-    const h = data.headers.get("www-authenticate")
+    const h = data.headers['www-authenticate']
     this.lastAuth = h
 
-    if (h.length < 5) {
+    if (!h || h.length < 5) {
       this.hasAuth = false
       return
     }
