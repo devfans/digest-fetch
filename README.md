@@ -26,7 +26,7 @@ const digestOptions = {
   algorithm: 'MD5' // only 'MD5' is supported now
 }
 
-const client = DigestFetch('user', 'password', digestOptions) 
+const client = new DigestFetch('user', 'password', digestOptions) 
 
 // do request same way as fetch or node-fetch
 const url = ''
