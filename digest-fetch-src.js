@@ -47,7 +47,7 @@ class DigestClient {
     const opaqueString = this.digest.opaque? `opaque="${this.digest.opaque}",` : ''
     const digest = `${this.digest.scheme} username="${this.user}",realm="${this.digest.realm}",\
 nonce="${this.digest.nonce}",uri="${uri}",${opaqueString}\
-qop=${this.digest.qop},algorithm="{this.digest.algorithm}",response="${response}",nc=${ncString},cnonce="${this.digest.cnonce}"`
+qop=${this.digest.qop},algorithm="${this.digest.algorithm}",response="${response}",nc=${ncString},cnonce="${this.digest.cnonce}"`
     options.headers = options.headers || {}
     options.headers.Authorization = digest
     if (this.logger) {
