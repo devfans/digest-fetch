@@ -1,6 +1,6 @@
 {
   "name": "digest-fetch",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "digest auth request plugin for fetch/node-fetch",
   "main": "digest-fetch-src.js",
   "scripts": {
@@ -23,10 +23,11 @@
     "url": "git+https://github.com/devfans/digest-fetch.git"
   },
   "devDependencies": {
-    "@babel/core": "^7.1.6",
-    "@babel/preset-env": "^7.1.6",
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
     "after": "^0.8.2",
     "babel-loader": "^8.0.4",
+    "babel-polyfill": "^6.26.0",
     "eslint": "^5.9.0",
     "eslint-plugin-markdown": "^1.0.0-rc.0",
     "istanbul": "^1.1.0-alpha.1",

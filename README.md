@@ -11,7 +11,7 @@ digest auth request plugin for fetch/node-fetch.
 ## Installation
 ```
 // dependencies for node
-npm install crypto-js node-fetch
+npm install node-fetch
 
 // for browers, if to use it directly, please indcude file `digest-fetch.js` in a <script/> 
 <script type="application/javascript" src="path-to-digest-fetch.js'></script>
@@ -20,10 +20,16 @@ npm install crypto-js node-fetch
 ## Get Started
 ```
 const DigestFetch = require('digest-fetch')
+// In browser: const DigestFetch = window.DigestFetch;
+
 const digestOptions = {
-  cnonceSize: 32,  // length of cnonce, default: 32
-  logger: console, // logger for debug, default: none
-  algorithm: 'MD5' // only 'MD5' is supported now
+  cnonceSize: 32,    // length of cnonce, default: 32
+  logger: console,   // logger for debug, default: none
+  algorithm: 'MD5',  // only 'MD5' is supported now
+
+  // Custom authentication failure code for avoiding browser prompt:
+  // https://stackoverflow.com/questions/9859627/how-to-prevent-browser-to-invoke-basic-auth-popup-and-handle-401-error-using-jqu
+  statusCode: 401    // default 401
 }
 
 const client = new DigestFetch('user', 'password', digestOptions) 

@@ -13,16 +13,20 @@ class DigestClient {
     const _cnonceSize = parseInt(options.cnonceSize)
     this.cnonceSize = isNaN(_cnonceSize) ? 32 : _cnonceSize // cnonce length 32 as default
     this.logger = options.logger
+
+    // Custom authentication failure code for avoiding browser prompt:
+    // https://stackoverflow.com/questions/9859627/how-to-prevent-browser-to-invoke-basic-auth-popup-and-handle-401-error-using-jqu
+    this.statusCode = options.statusCode || 401
   }
 
   async fetch (url, options={}) {
     const resp = await fetch(url, this.addAuth(url, options))
-    if (resp.status == 401) {
+    if (resp.status == this.statusCode) {
       this.hasAuth = false
       await this.parseAuth(resp)
       if (this.hasAuth) {
         const respFinal = await fetch(url, this.addAuth(url, options))
-        if (respFinal.status == 401) {
+        if (respFinal.status == this.statusCode) {
           this.hasAuth = false
         } else {
           this.digest.nc++
@@ -99,4 +103,5 @@ qop=${this.digest.qop},algorithm="${this.digest.algorithm}",response="${response
 
 }
 
+if (typeof(window) === "object") window.DigestFetch = DigestClient
 module.exports = DigestClient

@@ -1,10 +1,13 @@
+require("babel-polyfill");
 const webpack  = require('webpack')
 const path = require('path')
 
 module.exports = {
   mode: 'production',
+  target: "web",
   context: path.join(__dirname, './digest-fetch-src.js'),
   entry: [
+    "babel-polyfill",
     path.join(__dirname, './digest-fetch-src.js')
   ],
   output: {
