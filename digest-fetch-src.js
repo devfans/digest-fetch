@@ -55,7 +55,7 @@ class DigestClient {
 
     let ha1 = cryptojs.MD5(`${this.user}:${this.digest.realm}:${this.password}`).toString()
     if (this.digest.algorithm === 'MD5-sess') {
-      ha1 = cryptojs.MD5(`${ha1}:${this.digest.nonce}:${this.digest.cnone}`)
+      ha1 = cryptojs.MD5(`${ha1}:${this.digest.nonce}:${this.digest.cnone}`).toString()
     }
 
     // optional MD5(entityBody) for 'auth-int'
@@ -123,7 +123,7 @@ algorithm="${this.digest.algorithm}",response="${response}",nc=${ncString},cnonc
     // to parse valid qop
     const _qop = /qop=\"([^\"]+)\"/i.exec(rawAuth)
     if (_qop) {
-      const qops = _qop.replace(/\s/, '').split(',')
+      const qops = _qop[1].replace(/\s/, '').split(',')
       if (qops.includes('auth')) return 'auth'
       else if (qops.includes('auth-int')) return 'auth-int'
     }
