@@ -12,7 +12,7 @@ describe('digest-fetch', function(){
   it('should success', function() {
     var client = new DigestFetch('test', '123')
     assert.equal(typeof client.fetch, 'function')
-    client.parseAuth({headers: {}})
+    client.parseAuth({headers: { get() {} }})
     client.addAuth('', {headers: {}})
     assert.equal(client.digest.nc, 0)
   })

@@ -18,14 +18,20 @@ npm install node-fetch
 ```
 
 ## Get Started
+
+
 ```
 const DigestFetch = require('digest-fetch')
 // In browser: const DigestFetch = window.DigestFetch;
+```
 
+Initialize with option and credential
+
+```
 const digestOptions = {
   cnonceSize: 32,    // length of cnonce, default: 32
   logger: console,   // logger for debug, default: none
-  algorithm: 'MD5',  // only 'MD5' is supported now
+  algorithm: 'MD5',  // algorithm to be used, 'MD5' or 'MD5-sess'
 
   // Custom authentication failure code for avoiding browser prompt:
   // https://stackoverflow.com/questions/9859627/how-to-prevent-browser-to-invoke-basic-auth-popup-and-handle-401-error-using-jqu
@@ -34,16 +40,22 @@ const digestOptions = {
 
 const client = new DigestFetch('user', 'password', digestOptions) 
 
-// do request same way as fetch or node-fetch
+```
+
+Do request same way as fetch or node-fetch
+
+```
 const url = ''
 const options = {}
 client.fetch(url, options)
   .then(resp=>resp.json())
   .then(data=>console.log(data))
   .catch(e=>console.error(e))
+```
 
-// pass in refresh request options factory function for conditions options needs be refreshed when trying again.
-// etc: when posting with file stream
+Pass in refresh request options factory function for conditions options needs be refreshed when trying again.
+For example when posting with file stream:
+```
 const factory = () => ({ method: 'post', body: fs.createReadStream('path-to-file') })
 client.fetch(url, {factory})
   .then(resp=>resp.json())
@@ -51,6 +63,8 @@ client.fetch(url, {factory})
   .catch(e=>console.error(e))
 
 ```
+
+Please open issues if you find bugs and meet problems during using this plugin.
 
 
 [npm-image]: https://img.shields.io/npm/v/digest-fetch.svg
