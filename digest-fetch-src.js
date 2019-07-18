@@ -2,6 +2,7 @@ const canRequire = typeof(require) == 'function'
 if (typeof(fetch) !== 'function' && canRequire) var fetch = require('node-fetch')
 // if (typeof(cryptojs) !== 'function' && canRequire) var cryptojs = require('crypto-js')
 const cryptojs = require('crypto-js')
+const base64 = require('base-64')
 
 const supported_algorithms = ['MD5', 'MD5-sess']
 
@@ -25,13 +26,15 @@ class DigestClient {
     // Custom authentication failure code for avoiding browser prompt:
     // https://stackoverflow.com/questions/9859627/how-to-prevent-browser-to-invoke-basic-auth-popup-and-handle-401-error-using-jqu
     this.statusCode = options.statusCode || 401
+    this.basic = options.basic || false
   }
 
   async fetch (url, options={}) {
+    if (this.basic) return fetch(url, this.addBasicAuth(options))
     const resp = await fetch(url, this.addAuth(url, options))
     if (resp.status == this.statusCode) {
       this.hasAuth = false
-      await this.parseAuth(resp)
+      await this.parseAuth(resp.headers.get('www-authenticate'))
       if (this.hasAuth) {
         const respFinal = await fetch(url, this.addAuth(url, options))
         if (respFinal.status == this.statusCode) {
@@ -43,6 +46,22 @@ class DigestClient {
       }
     } else this.digest.nc++
     return resp
+  }
+
+  addBasicAuth (options={}) {
+    let _options = {}
+    if (typeof(options.factory) == 'function') {
+      _options = options.factory()
+    } else {
+      _options = options
+    }
+
+    const auth = 'Basic ' + base64.encode(this.user + ":" + this.password)
+    _options.headers = _options.headers || {}
+    _options.headers.Authorization = auth
+
+    if (this.logger) this.logger.debug(options)
+    return _options
   }
 
   addAuth (url, options) {
@@ -90,8 +109,7 @@ algorithm="${this.digest.algorithm}",response="${response}",nc=${ncString},cnonc
     return _options;
   }
 
-  async parseAuth (data) {
-    const h = data.headers.get('www-authenticate')
+  async parseAuth (h) {
     this.lastAuth = h
 
     if (!h || h.length < 5) {

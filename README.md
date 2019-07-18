@@ -6,7 +6,7 @@
 [![Build Status][travis-image]][travis-url]
 [![Test Coverage][coveralls-image]][coveralls-url]
 
-digest auth request plugin for fetch/node-fetch.
+digest auth request plugin for fetch/node-fetch, supports http basic authentication as well
 
 ## Installation
 ```
@@ -35,10 +35,14 @@ const digestOptions = {
 
   // Custom authentication failure code for avoiding browser prompt:
   // https://stackoverflow.com/questions/9859627/how-to-prevent-browser-to-invoke-basic-auth-popup-and-handle-401-error-using-jqu
-  statusCode: 401    // default 401
+  statusCode: 401,   // default 401
+
+  basic: false       // we support http basic authentication as well, enable it here if you want, default: false
 }
 
 const client = new DigestFetch('user', 'password', digestOptions) 
+
+const basic_auth_client = DigestFetch('user', 'password', { basic: true })
 
 ```
 
@@ -63,6 +67,12 @@ client.fetch(url, {factory})
   .catch(e=>console.error(e))
 
 ```
+
+## About
+
+Digest authentication: https://en.wikipedia.org/wiki/Digest_access_authentication
+This plugin is implemented following RFC2069 and RFC2617, supports http basic authentication as well!
+
 
 Please open issues if you find bugs and meet problems during using this plugin.
 
