@@ -1,7 +1,7 @@
 {
   "name": "digest-fetch",
-  "version": "1.0.1",
-  "description": "digest auth request plugin for fetch/node-fetch and support http basic auth authentication as well",
+  "version": "1.0.2",
+  "description": "digest auth request plugin for fetch/node-fetch also support http basic auth authentication",
   "main": "digest-fetch-src.js",
   "scripts": {
     "lint": "eslint --plugin markdown --ext js,md .",
