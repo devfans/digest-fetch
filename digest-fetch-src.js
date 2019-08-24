@@ -78,7 +78,7 @@ class DigestClient {
     }
 
     // optional MD5(entityBody) for 'auth-int'
-    let _ha2 = '' 
+    let _ha2 = ''
     if (this.digest.qop === 'auth-int') {
       // not implemented for auth-int
       if (this.logger) this.logger.warn('Sorry, auth-int is not implemented in this plugin')
@@ -118,18 +118,18 @@ algorithm="${this.digest.algorithm}",response="${response}",nc=${ncString},cnonc
     }
 
     this.hasAuth = true
-    
+
     this.digest.scheme = h.split(/\s/)[0]
 
-    const _realm = /realm=\"([^\"]+)\"/i.exec(h) 
+    const _realm = /realm=\"([^\"]+)\"/i.exec(h)
     if (_realm) this.digest.realm = _realm[1]
 
     this.digest.qop = this.parseQop(h)
 
-    const _opaque = /opaque=\"([^\"]+)\"/i.exec(h) 
+    const _opaque = /opaque=\"([^\"]+)\"/i.exec(h)
     if (_opaque) this.digest.opaque = _opaque[1]
-    
-    const _nonce = /nonce=\"([^\"]+)\"/i.exec(h) 
+
+    const _nonce = /nonce=\"([^\"]+)\"/i.exec(h)
     if (_nonce) this.digest.nonce = _nonce[1]
 
     this.digest.cnonce = this.makeNonce()
@@ -139,7 +139,7 @@ algorithm="${this.digest.algorithm}",response="${response}",nc=${ncString},cnonc
   parseQop (rawAuth) {
     // Following https://en.wikipedia.org/wiki/Digest_access_authentication
     // to parse valid qop
-    const _qop = /qop=\"([^\"]+)\"/i.exec(rawAuth)
+    const _qop = /qop=\"?([^\",]+)\"?/i.exec(rawAuth);
     if (_qop) {
       const qops = _qop[1].replace(/\s/, '').split(',')
       if (qops.includes('auth')) return 'auth'
