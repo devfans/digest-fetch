@@ -17,6 +17,14 @@ describe('digest-fetch', function(){
     assert.equal(client.digest.nc, 0)
   })
 
+  it('test parse string fields', function () {
+    assert.equal(DigestFetch.parse('a=,', 'a'), '')
+    assert.equal(DigestFetch.parse('a=v1,', 'a'), 'v1')
+    assert.equal(DigestFetch.parse('a=""', 'b'), null)
+    assert.equal(DigestFetch.parse('a="v2",', 'a'), 'v2')
+    assert.equal(DigestFetch.parse('a="v1,v2"', 'a'), 'v1,v2')
+  })
+
   it('test qop parsing', function () {
     var client = new DigestFetch('test', '123')
     assert.equal(client.parseQop('qop=auth,realm='), 'auth')

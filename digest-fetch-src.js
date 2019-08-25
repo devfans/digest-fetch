@@ -6,6 +6,14 @@ const base64 = require('base-64')
 
 const supported_algorithms = ['MD5', 'MD5-sess']
 
+const parse = (raw, field) => {
+  const regex = new RegExp(`${field}=("[^"]*"|[^,]*)`, "i")
+  const match = regex.exec(raw)
+  if (match)
+    return match[1].replace(/[\s"]/g, '')
+  return null
+}
+
 class DigestClient {
   constructor(user, password, options={}) {
     this.user = user
@@ -93,7 +101,7 @@ class DigestClient {
     if (!this.digest.qop) _response = `${ha1}:${this.digest.nonce}:${ha2}`
     const response = cryptojs.MD5(_response).toString()
 
-    const opaqueString = this.digest.opaque ? `opaque="${this.digest.opaque}",` : ''
+    const opaqueString = this.digest.opaque !== null ? `opaque="${this.digest.opaque}",` : ''
     const qopString = this.digest.qop ? `qop="${this.digest.qop}",` : ''
     const digest = `${this.digest.scheme} username="${this.user}",realm="${this.digest.realm}",\
 nonce="${this.digest.nonce}",uri="${uri}",${opaqueString}${qopString}\
@@ -121,16 +129,13 @@ algorithm="${this.digest.algorithm}",response="${response}",nc=${ncString},cnonc
     
     this.digest.scheme = h.split(/\s/)[0]
 
-    const _realm = /realm=\"([^\"]+)\"/i.exec(h) 
-    if (_realm) this.digest.realm = _realm[1]
+    this.digest.realm = parse(h, 'realm') || ''
 
     this.digest.qop = this.parseQop(h)
 
-    const _opaque = /opaque=\"([^\"]+)\"/i.exec(h) 
-    if (_opaque) this.digest.opaque = _opaque[1]
+    this.digest.opaque = parse(h, 'opaque')
     
-    const _nonce = /nonce=\"([^\"]+)\"/i.exec(h) 
-    if (_nonce) this.digest.nonce = _nonce[1]
+    this.digest.nonce = parse(h, 'nonce') || ''
 
     this.digest.cnonce = this.makeNonce()
     this.digest.nc++
@@ -142,9 +147,10 @@ algorithm="${this.digest.algorithm}",response="${response}",nc=${ncString},cnonc
     // Samples 
     // : qop="auth,auth-init",realm=
     // : qop=auth,realm=
-    const _qop = /qop=(\"[^\"]+\"|[^,]+)/i.exec(rawAuth)
-    if (_qop) {
-      const qops = _qop[1].replace(/[\s"]/g, '').split(',')
+    const _qop = parse(rawAuth, 'qop')
+
+    if (_qop !== null) {
+      const qops = _qop.split(',')
       if (qops.includes('auth')) return 'auth'
       else if (qops.includes('auth-int')) return 'auth-int'
     }
@@ -160,6 +166,9 @@ algorithm="${this.digest.algorithm}",response="${response}",nc=${ncString},cnonc
     return uid
   }
 
+  static parse(raw, field) {
+    return parse(raw, field)
+  }
 }
 
 if (typeof(window) === "object") window.DigestFetch = DigestClient
