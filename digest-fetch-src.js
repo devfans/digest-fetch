@@ -139,9 +139,12 @@ algorithm="${this.digest.algorithm}",response="${response}",nc=${ncString},cnonc
   parseQop (rawAuth) {
     // Following https://en.wikipedia.org/wiki/Digest_access_authentication
     // to parse valid qop
-    const _qop = /qop=\"([^\"]+)\"/i.exec(rawAuth)
+    // Samples 
+    // : qop="auth,auth-init",realm=
+    // : qop=auth,realm=
+    const _qop = /qop=(\"[^\"]+\"|[^,]+)/i.exec(rawAuth)
     if (_qop) {
-      const qops = _qop[1].replace(/\s/, '').split(',')
+      const qops = _qop[1].replace(/[\s"]/g, '').split(',')
       if (qops.includes('auth')) return 'auth'
       else if (qops.includes('auth-int')) return 'auth-int'
     }

@@ -16,4 +16,12 @@ describe('digest-fetch', function(){
     client.addAuth('', {headers: {}})
     assert.equal(client.digest.nc, 0)
   })
+
+  it('test qop parsing', function () {
+    var client = new DigestFetch('test', '123')
+    assert.equal(client.parseQop('qop=auth,realm='), 'auth')
+    assert.equal(client.parseQop('qop="auth",realm='), 'auth')
+    assert.equal(client.parseQop('qop="auth,auth-int",realm='), 'auth')
+    assert.equal(client.parseQop('qop="auth-int",realm='), 'auth-int')
+  })
 })
