@@ -121,6 +121,7 @@ algorithm="${this.digest.algorithm}",response="${response}",nc=${ncString},cnonc
     
     this.digest.scheme = h.split(/\s/)[0]
 
+    this.digest.realm = ''
     const _realm = /realm=\"([^\"]+)\"/i.exec(h) 
     if (_realm) this.digest.realm = _realm[1]
 
