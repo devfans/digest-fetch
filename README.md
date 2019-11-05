@@ -40,14 +40,15 @@ const client = new DigestFetch('user', 'password', { algorithm: 'MD5' })
 ```
 
 Options fields:
-| field          | type         | default       |  description |
-| :------------- | :----------: | :-----------: | ---------:   |
-|  algorithm     | string       | 'MD5'         | algorithm to be used: 'MD5' or 'MD5-sess'  |
-|  statusCode    | number       | 401           | custom authentication failure code for avoiding browser prompt, see details below |
-|  cnonceSize    | number       | 32            | length of the cnonce |
-|  logger        | object       | none          | logger for debug, can use `console`, default no logging |
-|  basic         | bool         | false         | switch to use basic authentication |
-|  precomputeHash| bool         | false         | wether to attach hash of credentials to the client instance instead of raw credential |
+
+| field           | type         | default       |  description |
+| :-------------  | :----------  | :-----------: | :----------  |
+|  algorithm      | string       | 'MD5'         | algorithm to be used: 'MD5' or 'MD5-sess'  |
+|  statusCode     | number       | 401           | custom authentication failure code for avoiding browser prompt, see details below |
+|  cnonceSize     | number       | 32            | length of the cnonce |
+|  logger         | object       | none          | logger for debug, can use `console`, default no logging |
+|  basic          | bool         | false         | switch to use basic authentication |
+|  precomputeHash | bool         | false         | wether to attach hash of credentials to the client instance instead of raw credential |
 
 Details:
  +  When using digest authentication in browsers, may encounter prompt window in foreground. Check: https://stackoverflow.com/questions/9859627/how-to-prevent-browser-to-invoke-basic-auth-popup-and-handle-401-error-using-jqu
