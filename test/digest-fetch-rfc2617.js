@@ -28,6 +28,21 @@ describe('digest-fetch', function(){
     })
   })
 
+  it('Test RFC2617 with precomputed hash', function() {
+    var client = new DigestFetch('test', DigestFetch.computeHash('test', 'Users', 'test'), { precomputedHash: true })
+    chai.request(app).get('/auth').then(res => {
+      expect(res).to.have.status(401)
+      client.lastAuth = res.res.headers['www-authenticate']
+    })
+    .then(() => {
+      client.parseAuth(client.lastAuth)
+      const auth = client.addAuth('/auth', { method: 'GET' }).headers.Authorization
+      chai.request(app).get('/auth').set('Authorization', auth).then(res => {
+        expect(res).to.have.status(200)
+      })
+    })
+  })
+
   it('Test RFC2617 with wrong credential', function() {
     var client = new DigestFetch('test', 'test-null')
     chai.request(app).get('/auth').then(res => {
