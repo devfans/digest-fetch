@@ -27,24 +27,38 @@ const DigestFetch = require('digest-fetch')
 
 Initialize with option and credential
 
+Create a digest authentication request client with default options
+
 ```
-const digestOptions = {
-  cnonceSize: 32,    // length of cnonce, default: 32
-  logger: console,   // logger for debug, default: none
-  algorithm: 'MD5',  // algorithm to be used, 'MD5' or 'MD5-sess'
+const client = new DigestFetch('user', 'password') 
+```
 
-  // Custom authentication failure code for avoiding browser prompt:
-  // https://stackoverflow.com/questions/9859627/how-to-prevent-browser-to-invoke-basic-auth-popup-and-handle-401-error-using-jqu
-  statusCode: 401,   // default 401
+Specify options for digest authentication
 
-  basic: false       // default false, we support http basic authentication as well, you can enable it here
-}
+``` 
+const client = new DigestFetch('user', 'password', { algorithm: 'MD5' }) 
+```
 
-const client = new DigestFetch('user', 'password', digestOptions) 
+Options fields:
+| field          | type         | default       |  description |
+| :------------- | :----------: | :-----------: | ---------:   |
+|  algorithm     | string       | 'MD5'         | algorithm to be used: 'MD5' or 'MD5-sess'  |
+|  statusCode    | number       | 401           | custom authentication failure code for avoiding browser prompt, see details below |
+|  cnonceSize    | number       | 32            | length of the cnonce |
+|  logger        | object       | none          | logger for debug, can use `console`, default no logging |
+|  basic         | bool         | false         | switch to use basic authentication |
+|  precomputeHash| bool         | false         | wether to attach hash of credentials to the client instance instead of raw credential |
 
-// For Http Basic Authentication
+Details:
+ +  When using digest authentication in browsers, may encounter prompt window in foreground. Check: https://stackoverflow.com/questions/9859627/how-to-prevent-browser-to-invoke-basic-auth-popup-and-handle-401-error-using-jqu
+
+
+Create a client using basic authentication challenge
+
+```
 const basic_auth_client = new DigestFetch('user', 'password', { basic: true })
 ```
+
 
 Do request same way as fetch or node-fetch
 
