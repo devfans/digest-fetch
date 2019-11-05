@@ -20,6 +20,7 @@ class DigestClient {
     this.password = password
     this.nonceRaw = 'abcdef0123456789'
     this.logger = options.logger
+    this.precomputedHash = options.precomputedHash
 
     let algorithm = options.algorithm || 'MD5'
     if (!supported_algorithms.includes(algorithm)) {
@@ -72,6 +73,10 @@ class DigestClient {
     return _options
   }
 
+  static computeHash(user, realm, password) {
+    return cryptojs.MD5(`${user}:${realm}:${password}`).toString();
+  }
+
   addAuth (url, options) {
     if (typeof(options.factory) == 'function') options = options.factory()
     if (!this.hasAuth) return options
@@ -80,7 +85,7 @@ class DigestClient {
     const uri = _url.indexOf('/') == -1 ? '/' : _url.slice(_url.indexOf('/'))
     const method = options.method ? options.method.toUpperCase() : 'GET'
 
-    let ha1 = cryptojs.MD5(`${this.user}:${this.digest.realm}:${this.password}`).toString()
+    let ha1 = this.precomputedHash ? this.password : DigestClient.computeHash(this.user, this.digest.realm, this.password)
     if (this.digest.algorithm === 'MD5-sess') {
       ha1 = cryptojs.MD5(`${ha1}:${this.digest.nonce}:${this.digest.cnone}`).toString()
     }
