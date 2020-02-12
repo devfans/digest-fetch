@@ -87,7 +87,7 @@ class DigestClient {
 
     let ha1 = this.precomputedHash ? this.password : DigestClient.computeHash(this.user, this.digest.realm, this.password)
     if (this.digest.algorithm === 'MD5-sess') {
-      ha1 = cryptojs.MD5(`${ha1}:${this.digest.nonce}:${this.digest.cnone}`).toString()
+      ha1 = cryptojs.MD5(`${ha1}:${this.digest.nonce}:${this.digest.cnonce}`).toString()
     }
 
     // optional MD5(entityBody) for 'auth-int'
