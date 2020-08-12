@@ -41,7 +41,7 @@
     "node-fetch": "^2.3.0",
     "passport": "^0.4.0",
     "passport-http": "^0.3.0",
-    "serialize-javascript": "^2.1.1",
+    "serialize-javascript": "^3.1.0",
     "terser-webpack-plugin": "^2.2.2",
     "webpack": "^4.26.1",
     "webpack-cli": "^3.1.2"
