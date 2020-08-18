@@ -1,6 +1,6 @@
 {
   "name": "digest-fetch",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "digest auth request plugin for fetch/node-fetch also support http basic auth authentication",
   "main": "digest-fetch-src.js",
   "scripts": {
@@ -37,7 +37,7 @@
     "eslint-plugin-markdown": "^1.0.0-rc.0",
     "express": "^4.17.1",
     "istanbul": "^1.1.0-alpha.1",
-    "mocha": "^5.2.0",
+    "mocha": "^8.1.1",
     "node-fetch": "^2.3.0",
     "passport": "^0.4.0",
     "passport-http": "^0.3.0",

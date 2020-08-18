@@ -1,3 +1,9 @@
+/// !-----------------------------------------------------------------------------------------------------------
+/// |  
+//  |  `digest-fetch` is a wrapper of `node-fetch` or `fetch` to provide http digest authentication boostraping.
+//  |
+/// !-----------------------------------------------------------------------------------------------------------
+
 const canRequire = typeof(require) == 'function'
 if (typeof(fetch) !== 'function' && canRequire) var fetch = require('node-fetch')
 // if (typeof(cryptojs) !== 'function' && canRequire) var cryptojs = require('crypto-js')
