@@ -87,7 +87,10 @@ class DigestClient {
     if (typeof(options.factory) == 'function') options = options.factory()
     if (!this.hasAuth) return options
     if (this.logger) this.logger.info(`requesting with auth carried`)
-    const _url = url.replace('//', '')
+
+    const isRequest = typeof(url) === 'object' && typeof(url.url) === 'string'
+    const urlStr = isRequest ? url.url : url
+    const _url = urlStr.replace('//', '')
     const uri = _url.indexOf('/') == -1 ? '/' : _url.slice(_url.indexOf('/'))
     const method = options.method ? options.method.toUpperCase() : 'GET'
 
