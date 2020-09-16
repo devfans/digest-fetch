@@ -19,13 +19,27 @@ npm install node-fetch
 
 ## Get Started
 
-
 ```
+// Use require
 const DigestFetch = require('digest-fetch')
-// In browser: const DigestFetch = window.DigestFetch;
+
+// Use import
+import * as DigestFetch from "digest-fetch"
+
+// In browser
+const DigestFetch = window.DigestFetch;
 ```
 
-Initialize with option and credential
+#### Http Basic Authentication
+Create a client using basic authentication challenge
+
+```
+const client = new DigestFetch('user', 'password', { basic: true })
+client.fetch(url, options).then(res => res.json).then(console.dir)
+
+```
+
+#### Digest Access Authentication
 
 Create a digest authentication request client with default options
 
@@ -52,13 +66,6 @@ Options fields:
 
 Details:
  +  When using digest authentication in browsers, may encounter prompt window in foreground. Check: https://stackoverflow.com/questions/9859627/how-to-prevent-browser-to-invoke-basic-auth-popup-and-handle-401-error-using-jqu
-
-
-Create a client using basic authentication challenge
-
-```
-const basic_auth_client = new DigestFetch('user', 'password', { basic: true })
-```
 
 
 Do request same way as fetch or node-fetch
