@@ -36,7 +36,6 @@ Create a client using basic authentication challenge
 ```
 const client = new DigestFetch('user', 'password', { basic: true })
 client.fetch(url, options).then(res => res.json).then(console.dir)
-
 ```
 
 #### Digest Access Authentication
@@ -87,7 +86,6 @@ client.fetch(url, {factory})
   .then(resp=>resp.json())
   .then(data=>console.log(data))
   .catch(e=>console.error(e))
-
 ```
 
 ## About
