@@ -66,4 +66,42 @@ describe('digest-fetch', function(){
     })
     .catch(done)
   })
+
+  it('Test RFC2617 with basic-and-digest', function(done) {
+    var client = new DigestFetch('test', 'test')
+    chai.request(app).get('/basic-and-digest').then(res => {
+      expect(res).to.have.status(401)
+      client.lastAuth = res.res.headers['www-authenticate']
+    })
+    .then(() => {
+      client.parseAuth(client.lastAuth)
+      const auth = client.addAuth('/basic-and-digest', { method: 'GET' }).headers.Authorization
+      expect(auth).to.match(/^Digest /)
+      chai.request(app).get('/basic-and-digest').set('Authorization', auth).then(res => {
+        expect(res).to.have.status(200)
+        done()
+      })
+      .catch(done)
+    })
+    .catch(done)
+  })
+
+  it('Test RFC2617 with digest-and-basic', function(done) {
+    var client = new DigestFetch('test', 'test')
+    chai.request(app).get('/digest-and-basic').then(res => {
+      expect(res).to.have.status(401)
+      client.lastAuth = res.res.headers['www-authenticate']
+    })
+    .then(() => {
+      client.parseAuth(client.lastAuth)
+      const auth = client.addAuth('/digest-and-basic', { method: 'GET' }).headers.Authorization
+      expect(auth).to.match(/^Digest /)
+      chai.request(app).get('/digest-and-basic').set('Authorization', auth).then(res => {
+        expect(res).to.have.status(200)
+        done()
+      })
+      .catch(done)
+    })
+    .catch(done)
+  })
 })

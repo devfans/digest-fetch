@@ -31,4 +31,22 @@ describe('digest-fetch', function(){
     })
     .catch(done)
   })
+  it('Test Basic Authentication with basic-and-digest', function(done) {
+    var client = new DigestFetch('test', 'test', { basic: true })
+    const auth = client.addBasicAuth().headers.Authorization
+    chai.request(app).get('/basic-and-digest').set('Authorization', auth).then(res => {
+      expect(res).to.have.status(200)
+      done()
+    })
+    .catch(done)
+  })
+  it('Test Basic Authentication with digest-and-basic', function(done) {
+    var client = new DigestFetch('test', 'test', { basic: true })
+    const auth = client.addBasicAuth().headers.Authorization
+    chai.request(app).get('/digest-and-basic').set('Authorization', auth).then(res => {
+      expect(res).to.have.status(200)
+      done()
+    })
+    .catch(done)
+  })
 })
