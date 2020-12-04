@@ -24,9 +24,9 @@ describe('digest-fetch', function(){
     assert.equal(DigestFetch.parse('a="v2",', 'a'), 'v2')
     assert.equal(DigestFetch.parse('a="v1,v2"', 'a'), 'v1,v2')
     const client = new DigestFetch("", "")
-    client.parseAuth('qop=auth-int,realm=test')
+    client.parseAuth('Digest qop=auth-int,realm=test',1)
     assert.equal(client.digest.realm, "test")
-    client.parseAuth('qop="auth",realm="v1 v2"')
+    client.parseAuth('Digest qop="auth",realm="v1 v2"')
     assert.equal(client.digest.realm, "v1 v2")
   })
 
