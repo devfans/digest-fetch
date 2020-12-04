@@ -13,18 +13,22 @@ var app = factory.getApp()
 
 describe('digest-fetch', function(){
 
-  it('Test Basic Authentication', function() {
+  it('Test Basic Authentication', function(done) {
     var client = new DigestFetch('test', 'test', { basic: true })
     const auth = client.addBasicAuth().headers.Authorization
     chai.request(app).get('/basic').set('Authorization', auth).then(res => {
       expect(res).to.have.status(200)
+      done()
     })
+    .catch(done)
   })
-  it('Test Basic Authentication with wrong credential', function() {
+  it('Test Basic Authentication with wrong credential', function(done) {
     var client = new DigestFetch('test', 'test-null', { basic: true })
     const auth = client.addBasicAuth().headers.Authorization
     chai.request(app).get('/basic').set('Authorization', auth).then(res => {
       expect(res).to.have.status(401)
+      done()
     })
+    .catch(done)
   })
 })
