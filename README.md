@@ -95,6 +95,7 @@ This plugin is implemented following RFC2069 and RFC2617, supports http basic au
 
 
 Please open issues if you find bugs or meet problems during using this plugin.
+Feel free to open PRs whenever you have better ideas on this project!
 
 
 [npm-image]: https://img.shields.io/npm/v/digest-fetch.svg
