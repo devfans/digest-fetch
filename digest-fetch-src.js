@@ -73,7 +73,10 @@ class DigestClient {
 
     const auth = 'Basic ' + base64.encode(this.user + ":" + this.password)
     _options.headers = _options.headers || {}
-    _options.headers.Authorization = auth
+    _options.headers.Authorization = auth;
+    if (typeof(_options.headers.set) == 'function') {
+      _options.headers.set('Authorization', auth)
+    }
 
     if (this.logger) this.logger.debug(options)
     return _options
@@ -122,6 +125,10 @@ nonce="${this.digest.nonce}",uri="${uri}",${opaqueString}${qopString}\
 algorithm="${this.digest.algorithm}",response="${response}",nc=${ncString},cnonce="${this.digest.cnonce}"`
     options.headers = options.headers || {}
     options.headers.Authorization = digest
+    if (typeof(options.headers.set) == 'function') {
+      options.headers.set('Authorization', digest)
+    }
+
     if (this.logger) this.logger.debug(options)
 
     // const {factory, ..._options} = options
