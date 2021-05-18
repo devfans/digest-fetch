@@ -6,8 +6,7 @@
 
 const canRequire = typeof(require) == 'function'
 if (typeof(fetch) !== 'function' && canRequire) var fetch = require('node-fetch')
-// if (typeof(cryptojs) !== 'function' && canRequire) var cryptojs = require('crypto-js')
-const cryptojs = require('crypto-js')
+const md5 = require('md5')
 const base64 = require('base-64')
 
 const supported_algorithms = ['MD5', 'MD5-sess']
@@ -83,7 +82,7 @@ class DigestClient {
   }
 
   static computeHash(user, realm, password) {
-    return cryptojs.MD5(`${user}:${realm}:${password}`).toString();
+    return md5(`${user}:${realm}:${password}`);
   }
 
   addAuth (url, options) {
@@ -99,7 +98,7 @@ class DigestClient {
 
     let ha1 = this.precomputedHash ? this.password : DigestClient.computeHash(this.user, this.digest.realm, this.password)
     if (this.digest.algorithm === 'MD5-sess') {
-      ha1 = cryptojs.MD5(`${ha1}:${this.digest.nonce}:${this.digest.cnonce}`).toString()
+      ha1 = md5(`${ha1}:${this.digest.nonce}:${this.digest.cnonce}`);
     }
 
     // optional MD5(entityBody) for 'auth-int'
@@ -108,15 +107,15 @@ class DigestClient {
       // not implemented for auth-int
       if (this.logger) this.logger.warn('Sorry, auth-int is not implemented in this plugin')
       // const entityBody = xxx
-      // _ha2 = ':' + cryptojs.MD5(entityBody).toString()
+      // _ha2 = ':' + md5(entityBody)
     }
-    const ha2 = cryptojs.MD5(`${method}:${uri}${_ha2}`).toString()
+    const ha2 = md5(`${method}:${uri}${_ha2}`);
 
     const ncString = ('00000000'+this.digest.nc).slice(-8)
 
     let _response = `${ha1}:${this.digest.nonce}:${ncString}:${this.digest.cnonce}:${this.digest.qop}:${ha2}`
     if (!this.digest.qop) _response = `${ha1}:${this.digest.nonce}:${ha2}`
-    const response = cryptojs.MD5(_response).toString()
+    const response = md5(_response);
 
     const opaqueString = this.digest.opaque !== null ? `opaque="${this.digest.opaque}",` : ''
     const qopString = this.digest.qop ? `qop="${this.digest.qop}",` : ''
