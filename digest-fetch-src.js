@@ -46,7 +46,7 @@ class DigestClient {
   async fetch (url, options={}) {
     if (this.basic) return fetch(url, this.addBasicAuth(options))
     const resp = await fetch(url, this.addAuth(url, options))
-    if (resp.status == 401 || resp.status == this.statusCode) {
+    if (resp.status == 401 || (resp.status == this.statusCode && this.statusCode)) {
       this.hasAuth = false
       await this.parseAuth(resp.headers.get('www-authenticate'))
       if (this.hasAuth) {

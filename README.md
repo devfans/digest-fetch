@@ -57,7 +57,7 @@ Options fields:
 | field           | type         | default       |  description |
 | :-------------  | :----------  | :-----------: | :----------  |
 |  algorithm      | string       | 'MD5'         | algorithm to be used: 'MD5' or 'MD5-sess'  |
-|  statusCode     | number       | 401           | custom authentication failure code for avoiding browser prompt, see details below |
+|  statusCode     | number       | 401           | custom alternate authentication failure code for avoiding browser prompt, see details below |
 |  cnonceSize     | number       | 32            | length of the cnonce |
 |  logger         | object       | none          | logger for debug, can use `console`, default no logging |
 |  basic          | bool         | false         | switch to use basic authentication |
