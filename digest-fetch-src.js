@@ -39,19 +39,19 @@ class DigestClient {
 
     // Custom authentication failure code for avoiding browser prompt:
     // https://stackoverflow.com/questions/9859627/how-to-prevent-browser-to-invoke-basic-auth-popup-and-handle-401-error-using-jqu
-    this.statusCode = options.statusCode || 401
+    this.statusCode = options.statusCode
     this.basic = options.basic || false
   }
 
   async fetch (url, options={}) {
     if (this.basic) return fetch(url, this.addBasicAuth(options))
     const resp = await fetch(url, this.addAuth(url, options))
-    if (resp.status == this.statusCode) {
+    if (resp.status == 401 || resp.status == this.statusCode) {
       this.hasAuth = false
       await this.parseAuth(resp.headers.get('www-authenticate'))
       if (this.hasAuth) {
         const respFinal = await fetch(url, this.addAuth(url, options))
-        if (respFinal.status == this.statusCode) {
+        if (respFinal.status == 401 || respFinal.status == this.statusCode) {
           this.hasAuth = false
         } else {
           this.digest.nc++
