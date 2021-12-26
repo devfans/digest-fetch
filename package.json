@@ -14,7 +14,7 @@
     "digest",
     "auth",
     "fetch",
-    "node-feth",
+    "node-fetch",
     "http",
     "basic",
     "authentication"
