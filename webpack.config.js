@@ -11,6 +11,7 @@ module.exports = {
     path.join(__dirname, './digest-fetch-src.js')
   ],
   output: {
+    uniqueName: 'digest-fetch.js',
     path: path.join(__dirname, '.'),
     filename: 'digest-fetch.js',
     globalObject: 'this'
@@ -20,8 +21,8 @@ module.exports = {
       {
         test    : /\.js$/,
         exclude : /(node_modules|build|dist\/)/,
-        loader    : 'babel-loader',
-        query   : { presets: ["@babel/preset-env"] }
+        loader  : 'babel-loader',
+        options : { presets: ["@babel/preset-env"] }
       }
     ]
   },
@@ -31,5 +32,8 @@ module.exports = {
       path.join(__dirname, './node_modules'),
       __dirname,
     ],
-  }
+  },
+  optimization: {
+    minimize: true,
+  },
 };
