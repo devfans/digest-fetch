@@ -53,6 +53,18 @@ module.exports = { getApp(method) {
     function(req, res) {
       res.json(req.user);
   });
+  // http basic and digest authentication
+  app.get('/basic-and-digest',
+    passport.authenticate(['basic', 'digest'], { session: false }),
+    function(req, res) {
+      res.json(req.user);
+  });
+  // http digest and basic authentication
+  app.get('/digest-and-basic',
+    passport.authenticate(['digest','basic'], { session: false }),
+    function(req, res) {
+      res.json(req.user);
+  });
 
 
   // app.use("/static", express.static(path.join(__dirname, './static')));

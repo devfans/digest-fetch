@@ -11,6 +11,14 @@ const base64 = require('base-64')
 
 const supported_algorithms = ['MD5', 'MD5-sess']
 
+// challenge = auth-scheme 1*SP 1#auth-param
+
+const tokenRegexp = '[!#-\'*+-.0-9A-Z^_`a-z~]+'
+const schemeRegexp = tokenRegexp
+const paramRegexp = tokenRegexp+'='+'('+tokenRegexp+'|"([^"\\\\]|\\\\.)*")'
+
+const challengeRegexp = new RegExp('^(('+schemeRegexp+') +'+paramRegexp+'( *, *'+paramRegexp+')*) *(, *'+schemeRegexp+' .*)?$')
+
 const parse = (raw, field, trim=true) => {
   const regex = new RegExp(`${field}=("[^"]*"|[^,]*)`, "i")
   const match = regex.exec(raw)
@@ -119,7 +127,7 @@ class DigestClient {
 
     const opaqueString = this.digest.opaque !== null ? `opaque="${this.digest.opaque}",` : ''
     const qopString = this.digest.qop ? `qop="${this.digest.qop}",` : ''
-    const digest = `${this.digest.scheme} username="${this.user}",realm="${this.digest.realm}",\
+    const digest = `Digest username="${this.user}",realm="${this.digest.realm}",\
 nonce="${this.digest.nonce}",uri="${uri}",${opaqueString}${qopString}\
 algorithm="${this.digest.algorithm}",response="${response}",nc=${ncString},cnonce="${this.digest.cnonce}"`
     options.headers = options.headers || {}
@@ -146,19 +154,38 @@ algorithm="${this.digest.algorithm}",response="${response}",nc=${ncString},cnonc
     }
 
     this.hasAuth = true
-    
-    this.digest.scheme = h.split(/\s/)[0]
+    while (true) {
+      const challengeMatch = h.match(challengeRegexp)
+      if (!challengeMatch) {
+        break
+      }
+      const challenge = challengeMatch[1]
+      const scheme = challengeMatch[2]
 
-    this.digest.realm = (parse(h, 'realm', false) || '').replace(/["]/g, '')
+      if (scheme.match(/^Digest$/i)) {
 
-    this.digest.qop = this.parseQop(h)
+        this.digest.realm = (parse(challenge, 'realm', false) || '').replace(/["]/g, '')
 
-    this.digest.opaque = parse(h, 'opaque')
-    
-    this.digest.nonce = parse(h, 'nonce') || ''
+        this.digest.qop = this.parseQop(challenge)
 
-    this.digest.cnonce = this.makeNonce()
-    this.digest.nc++
+        this.digest.opaque = parse(challenge, 'opaque')
+
+        this.digest.nonce = parse(challenge, 'nonce') || ''
+
+        this.digest.cnonce = this.makeNonce()
+        this.digest.nc++
+      }
+      h = h.substr(challenge.length)
+      if (!h) {
+        break
+      }
+      const comma = h.match("^( *, *).*")
+      if (!comma) {
+        // TODO: parse error
+        break
+      }
+      h = h.substr(comma[1].length)
+    }
   }
 
   parseQop (rawAuth) {
