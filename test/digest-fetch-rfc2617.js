@@ -13,7 +13,7 @@ var app = factory.getApp('auth')
 
 describe('digest-fetch', function(){
 
-  it('Test RFC2617', function() {
+  it('Test RFC2617', function(done) {
     var client = new DigestFetch('test', 'test')
     chai.request(app).get('/auth').then(res => {
       expect(res).to.have.status(401)
@@ -24,11 +24,14 @@ describe('digest-fetch', function(){
       const auth = client.addAuth('/auth', { method: 'GET' }).headers.Authorization
       chai.request(app).get('/auth').set('Authorization', auth).then(res => {
         expect(res).to.have.status(200)
+        done()
       })
+      .catch(done)
     })
+    .catch(done)
   })
 
-  it('Test RFC2617 with precomputed hash', function() {
+  it('Test RFC2617 with precomputed hash', function(done) {
     var client = new DigestFetch('test', DigestFetch.computeHash('test', 'Users', 'test'), { precomputedHash: true })
     chai.request(app).get('/auth').then(res => {
       expect(res).to.have.status(401)
@@ -39,11 +42,14 @@ describe('digest-fetch', function(){
       const auth = client.addAuth('/auth', { method: 'GET' }).headers.Authorization
       chai.request(app).get('/auth').set('Authorization', auth).then(res => {
         expect(res).to.have.status(200)
+        done()
       })
+      .catch(done)
     })
+    .catch(done)
   })
 
-  it('Test RFC2617 with wrong credential', function() {
+  it('Test RFC2617 with wrong credential', function(done) {
     var client = new DigestFetch('test', 'test-null')
     chai.request(app).get('/auth').then(res => {
       expect(res).to.have.status(401)
@@ -54,7 +60,10 @@ describe('digest-fetch', function(){
       const auth = client.addAuth('/auth', { method: 'GET' }).headers.Authorization
       chai.request(app).get('/auth').set('Authorization', auth).then(res => {
         expect(res).to.have.status(401)
+        done()
       })
+      .catch(done)
     })
+    .catch(done)
   })
 })
