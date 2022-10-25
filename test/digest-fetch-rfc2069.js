@@ -11,7 +11,7 @@ chai.use(chaiHttp)
 chai.should()
 var app = factory.getApp()
 
-describe('digest-fetch', function(){
+describe('digest-fetch-rfc2069', function(){
 
   it('Test RFC2069', function() {
     var client = new DigestFetch('test', 'test')

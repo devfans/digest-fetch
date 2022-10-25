@@ -7,9 +7,11 @@
 const canRequire = typeof(require) == 'function'
 if (typeof(fetch) !== 'function' && canRequire) var fetch = require('node-fetch')
 const md5 = require('md5')
+const sha256 = require('js-sha256').sha256
+const sha512256 = require('js-sha512').sha512_256
 const base64 = require('base-64')
 
-const supported_algorithms = ['MD5', 'MD5-sess']
+const supported_algorithms = ['MD5', 'MD5-sess', 'SHA-256', 'SHA-256-sess', 'SHA-512-256', 'SHA-512-256-sess']
 
 const parse = (raw, field, trim=true) => {
   const regex = new RegExp(`${field}=("[^"]*"|[^,]*)`, "i")
@@ -22,6 +24,7 @@ const parse = (raw, field, trim=true) => {
 class DigestClient {
   constructor(user, password, options={}) {
     this.user = user
+    this.hashFunc = md5;
     this.password = password
     this.nonceRaw = 'abcdef0123456789'
     this.logger = options.logger
@@ -31,6 +34,11 @@ class DigestClient {
     if (!supported_algorithms.includes(algorithm)) {
       if (this.logger) this.logger.warn(`Unsupported algorithm ${algorithm}, will try with MD5`)
       algorithm = 'MD5'
+    }
+    if (algorithm.startsWith('SHA-256')) {
+      this.hashFunc = sha256
+    } else if (algorithm.startsWith('SHA-512-256')) {
+      this.hashFunc = sha512256
     }
     this.digest = { nc: 0, algorithm, realm: '' }
     this.hasAuth = false
@@ -81,8 +89,12 @@ class DigestClient {
     return _options
   }
 
-  static computeHash(user, realm, password) {
-    return md5(`${user}:${realm}:${password}`);
+  computeHash(user, realm, password) {
+    return this.hashWithAlgorithm(`${user}:${realm}:${password}`);
+  }
+
+  hashWithAlgorithm(data) {
+    return this.hashFunc(data)
   }
 
   addAuth (url, options) {
@@ -96,32 +108,32 @@ class DigestClient {
     const uri = _url.indexOf('/') == -1 ? '/' : _url.slice(_url.indexOf('/'))
     const method = options.method ? options.method.toUpperCase() : 'GET'
 
-    let ha1 = this.precomputedHash ? this.password : DigestClient.computeHash(this.user, this.digest.realm, this.password)
-    if (this.digest.algorithm === 'MD5-sess') {
-      ha1 = md5(`${ha1}:${this.digest.nonce}:${this.digest.cnonce}`);
+    let ha1 = this.precomputedHash ? this.password : this.computeHash(this.user, this.digest.realm, this.password)
+    if (this.digest.algorithm.endsWith('-sess')) {
+      ha1 = this.hashWithAlgorithm(`${ha1}:${this.digest.nonce}:${this.digest.cnonce}`);
     }
 
-    // optional MD5(entityBody) for 'auth-int'
+    // optional Hash(entityBody) for 'auth-int'
     let _ha2 = '' 
     if (this.digest.qop === 'auth-int') {
       // not implemented for auth-int
       if (this.logger) this.logger.warn('Sorry, auth-int is not implemented in this plugin')
       // const entityBody = xxx
-      // _ha2 = ':' + md5(entityBody)
+      // _ha2 = ':' + hash(entityBody)
     }
-    const ha2 = md5(`${method}:${uri}${_ha2}`);
+    const ha2 = this.hashWithAlgorithm(`${method}:${uri}${_ha2}`);
 
     const ncString = ('00000000'+this.digest.nc).slice(-8)
 
     let _response = `${ha1}:${this.digest.nonce}:${ncString}:${this.digest.cnonce}:${this.digest.qop}:${ha2}`
     if (!this.digest.qop) _response = `${ha1}:${this.digest.nonce}:${ha2}`
-    const response = md5(_response);
+    const response = this.hashWithAlgorithm(_response);
 
     const opaqueString = this.digest.opaque !== null ? `opaque="${this.digest.opaque}",` : ''
-    const qopString = this.digest.qop ? `qop="${this.digest.qop}",` : ''
+    const qopString = this.digest.qop ? `qop=${this.digest.qop},` : ''
     const digest = `${this.digest.scheme} username="${this.user}",realm="${this.digest.realm}",\
 nonce="${this.digest.nonce}",uri="${uri}",${opaqueString}${qopString}\
-algorithm="${this.digest.algorithm}",response="${response}",nc=${ncString},cnonce="${this.digest.cnonce}"`
+algorithm=${this.digest.algorithm},response="${response}",nc=${ncString},cnonce="${this.digest.cnonce}"`
     options.headers = options.headers || {}
     options.headers.Authorization = digest
     if (typeof(options.headers.set) == 'function') {

@@ -11,7 +11,7 @@ chai.use(chaiHttp)
 chai.should()
 var app = factory.getApp()
 
-describe('digest-fetch', function(){
+describe('digest-fetch-basic', function(){
 
   it('Test Basic Authentication', function() {
     var client = new DigestFetch('test', 'test', { basic: true })

@@ -52,11 +52,16 @@ Specify options for digest authentication
 const client = new DigestFetch('user', 'password', { algorithm: 'MD5' }) 
 ```
 
+Supported Algorithm
+```
+['MD5', 'MD5-sess', 'SHA-256', 'SHA-256-sess', 'SHA-512-256', 'SHA-512-256-sess']
+```
+
 Options fields:
 
 | field           | type         | default       |  description |
 | :-------------  | :----------  | :-----------: | :----------  |
-|  algorithm      | string       | 'MD5'         | algorithm to be used: 'MD5' or 'MD5-sess'  |
+|  algorithm      | string       | 'MD5'         | algorithm to be used: 'MD5', 'SHA-256', 'SHA-512-256' or with '-sess' |
 |  statusCode     | number       | 401           | custom alternate authentication failure code for avoiding browser prompt, see details below |
 |  cnonceSize     | number       | 32            | length of the cnonce |
 |  logger         | object       | none          | logger for debug, can use `console`, default no logging |
@@ -90,8 +95,8 @@ client.fetch(url, {factory})
 
 ## About
 
-Digest authentication: https://en.wikipedia.org/wiki/Digest_access_authentication
-This plugin is implemented following RFC2069 and RFC2617, supports http basic authentication as well!
+Digest authentication: https://en.wikipedia.org/wiki/Digest_access_authentication or https://www.rfc-editor.org/rfc/rfc7616
+This plugin is implemented following RFC2069, RFC2617 and RFC7616 supports http basic authentication as well!
 
 
 Please open issues if you find bugs or meet problems during using this plugin.
