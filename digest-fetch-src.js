@@ -56,7 +56,7 @@ class DigestClient {
     const resp = await fetch(url, this.addAuth(url, options))
     if (resp.status == 401 || (resp.status == this.statusCode && this.statusCode)) {
       this.hasAuth = false
-      await this.parseAuth(resp.headers.get('www-authenticate'))
+      this.parseAuth(resp.headers.get('www-authenticate'))
       if (this.hasAuth) {
         const respFinal = await fetch(url, this.addAuth(url, options))
         if (respFinal.status == 401 || respFinal.status == this.statusCode) {
@@ -149,7 +149,7 @@ algorithm=${this.digest.algorithm},response="${response}",nc=${ncString},cnonce=
     return _options;
   }
 
-  async parseAuth (h) {
+  parseAuth (h) {
     this.lastAuth = h
 
     if (!h || h.length < 5) {

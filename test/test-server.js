@@ -1,7 +1,7 @@
 const path = require("path");
 const express = require("express");
 const passport = require('passport');
-const Strategies = require("passport-http");
+const Strategies = require("passport-digest");
 const DigestStrategy = Strategies.DigestStrategy;
 const BasicStrategy = Strategies.BasicStrategy;
 
@@ -25,7 +25,7 @@ module.exports = { getApp(method) {
     }
   ));
 
-  const options = {}
+  const options = {algorithm: "MD5,SHA-256,SHA-512-256"}
   if (method) options.qop = method
   passport.use(new DigestStrategy(options,
     function(username, done) {

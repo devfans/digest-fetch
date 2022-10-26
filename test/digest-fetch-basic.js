@@ -16,14 +16,14 @@ describe('digest-fetch-basic', function(){
   it('Test Basic Authentication', function() {
     var client = new DigestFetch('test', 'test', { basic: true })
     const auth = client.addBasicAuth().headers.Authorization
-    chai.request(app).get('/basic').set('Authorization', auth).then(res => {
+    return chai.request(app).get('/basic').set('Authorization', auth).then(res => {
       expect(res).to.have.status(200)
     })
   })
   it('Test Basic Authentication with wrong credential', function() {
     var client = new DigestFetch('test', 'test-null', { basic: true })
     const auth = client.addBasicAuth().headers.Authorization
-    chai.request(app).get('/basic').set('Authorization', auth).then(res => {
+    return chai.request(app).get('/basic').set('Authorization', auth).then(res => {
       expect(res).to.have.status(401)
     })
   })
