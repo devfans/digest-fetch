@@ -8,7 +8,8 @@
     "test": "mocha --check-leaks --bail --no-exit --reporter spec test/digest-*",
     "test-cov": "istanbul cover node_modules/mocha/bin/_mocha -- --check-leaks --no-exit --reporter dot test/",
     "test-travis": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --check-leaks --no-exit --reporter spec test/",
-    "build": "NODE_ENV=\"production\" webpack"
+    "build": "NODE_ENV=\"production\" webpack",
+    "declare": "tsc digest-fetch-src.js --allowJs --emitDeclarationOnly --declaration"
   },
   "keywords": [
     "digest",
