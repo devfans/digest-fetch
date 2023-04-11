@@ -10,16 +10,15 @@ digest auth request plugin for fetch/node-fetch also supports http basic authent
 
 ## Installation
 
-// For digest-fetch 3.x.x or above
+For digest-fetch 3.0.0 or above
 ```
-npm install node-fetch@latest
+npm install digest-fetch@latest node-fetch@latest
 
 ```
 
-// For digest-fetch 2.0.3 or below
+For digest-fetch 2.0.3 or below
 ```
-// dependencies for node
-npm install node-fetch@@v2
+npm install digest-fetch@v2 node-fetch@v2
 
 ```
 
@@ -27,20 +26,48 @@ npm install node-fetch@@v2
 
 ```
 // Use require for digest-fetch 2.0.3 or below
-const DigestFetch = require('digest-fetch')
+const DigestClient = require('digest-fetch')
 
 // Use import
-import DigestFetch from "digest-fetch"
+import DigestClient from "digest-fetch"
 
-// typescript
-import DigestFetch from 'digest-fetch'
+```
+
+#### Typescript 
+
+For digest-fetch 3.0.0 or above
+
+Since digest-fetch becomes ES module starting 3.0.0, you need to set your project as module to use import. 
+
+- Specify ```"type": "module"``` in your package.json
+- Specify ```--esm``` for ts-node like ```npx ts-node --esm src/index.ts```
+- Specify ```"module": "ESNext", "moduleResolution": "node"``` in your tsconfig.json
+
+```
+// Install dependencies
+npm install digest-fetch@latest node-fetch@latest
+
+// Import
+import DigestClient from "digest-fetch"
+
+```
+
+For digest-fetch 2.0.3 or below
+
+```
+// Install dependencies
+npm install digest-fetch@v2 node-fetch@v2
+
+// Import
+import DigestClient from "digest-fetch"
+
 ```
 
 #### Http Basic Authentication
 Create a client using basic authentication challenge
 
 ```
-const client = new DigestFetch('user', 'password', { basic: true })
+const client = new DigestClient('user', 'password', { basic: true })
 client.fetch(url, options).then(res => res.json).then(console.dir)
 ```
 
@@ -49,13 +76,13 @@ client.fetch(url, options).then(res => res.json).then(console.dir)
 Create a digest authentication request client with default options
 
 ```
-const client = new DigestFetch('user', 'password') 
+const client = new DigestClient('user', 'password') 
 ```
 
 Specify options for digest authentication
 
 ``` 
-const client = new DigestFetch('user', 'password', { algorithm: 'MD5' }) 
+const client = new DigestClient('user', 'password', { algorithm: 'MD5' }) 
 ```
 
 Supported Algorithm
