@@ -1,5 +1,4 @@
-export = DigestClient;
-declare class DigestClient {
+export class DigestClient {
     static parse(...args: any[]): string;
     constructor(user: any, password: any, options?: {});
     user: any;
@@ -17,7 +16,9 @@ declare class DigestClient {
     cnonceSize: number;
     statusCode: any;
     basic: any;
-    fetch(url: any, options?: {}): Promise<any>;
+    getClient(): Promise<typeof fetch | typeof import("node-fetch").default>;
+    _client: typeof import("node-fetch").default;
+    fetch(url: any, options?: {}): Promise<Response | import("node-fetch").Response>;
     addBasicAuth(options?: {}): {
         headers: {
             Authorization: string;
@@ -31,3 +32,4 @@ declare class DigestClient {
     parseQop(rawAuth: any): "auth" | "auth-int";
     makeNonce(): string;
 }
+export default DigestClient;

@@ -1,8 +1,12 @@
 process.env.NO_DEPRECATION = 'digest-fetch';
 
-var after = require('after')
-var assert = require('assert')
-var DigestFetch = require('../')
+import after from 'after';
+import assert from 'assert';
+import DigestFetch from '../digest-fetch-src.js';
+import factory from './test-server.js';
+import chai from 'chai';
+var expect = chai.expect
+import chaiHttp from 'chai-http';
 
 describe('digest-fetch', function(){
   it('get function', function(){

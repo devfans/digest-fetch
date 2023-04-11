@@ -1,11 +1,11 @@
-const path = require("path");
-const express = require("express");
-const passport = require('passport');
-const Strategies = require("passport-digest");
+import path from "path";
+import express from "express";
+import passport from 'passport';
+import * as Strategies from "passport-digest";
 const DigestStrategy = Strategies.DigestStrategy;
 const BasicStrategy = Strategies.BasicStrategy;
 
-module.exports = { getApp(method) {
+const server = { getApp(method) {
   const app = express();
 
   const User = {
@@ -60,3 +60,5 @@ module.exports = { getApp(method) {
   // app.listen(3222, "0.0.0.0");
   return app
 }}
+
+export default server

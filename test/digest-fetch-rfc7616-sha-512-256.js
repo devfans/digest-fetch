@@ -1,12 +1,12 @@
 process.env.NO_DEPRECATION = 'digest-fetch';
 
-var after = require('after')
-var assert = require('assert')
-var DigestFetch = require('../')
-var factory = require('./test-server')
-var chai = require('chai')
+import after from 'after';
+import assert from 'assert';
+import DigestFetch from '../digest-fetch-src.js';
+import factory from './test-server.js';
+import chai from 'chai';
 var expect = chai.expect
-var chaiHttp = require('chai-http')
+import chaiHttp from 'chai-http';
 chai.use(chaiHttp)
 chai.should()
 var app = factory.getApp('auth')

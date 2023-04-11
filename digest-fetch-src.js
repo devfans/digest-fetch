@@ -4,12 +4,12 @@
 //  |
 /// !-----------------------------------------------------------------------------------------------------------
 
-const canRequire = typeof(require) == 'function'
-if (typeof(fetch) !== 'function' && canRequire) var fetch = require('node-fetch')
-const md5 = require('md5')
-const sha256 = require('js-sha256').sha256
-const sha512256 = require('js-sha512').sha512_256
-const base64 = require('base-64')
+import md5 from 'md5';
+import js256 from 'js-sha256';
+const sha256 = js256.sha256;
+import js512 from 'js-sha512';
+const sha512256 = js512.sha512_256;
+import base64 from 'base-64';
 
 const supported_algorithms = ['MD5', 'MD5-sess', 'SHA-256', 'SHA-256-sess', 'SHA-512-256', 'SHA-512-256-sess']
 
@@ -21,7 +21,7 @@ const parse = (raw, field, trim=true) => {
   return null
 }
 
-class DigestClient {
+export class DigestClient {
   constructor(user, password, options={}) {
     this.user = user
     this.hashFunc = md5;
@@ -51,7 +51,16 @@ class DigestClient {
     this.basic = options.basic || false
   }
 
+  async getClient() {
+    if (typeof(fetch) !== 'function' && this._client == undefined) {
+      const module = await import('node-fetch');
+      this._client = module.default;
+    }
+    return fetch || this._client;
+  }
+
   async fetch (url, options={}) {
+    const fetch = await this.getClient();
     if (this.basic) return fetch(url, this.addBasicAuth(options))
     const resp = await fetch(url, this.addAuth(url, options))
     if (resp.status == 401 || (resp.status == this.statusCode && this.statusCode)) {
@@ -204,4 +213,4 @@ algorithm=${this.digest.algorithm},response="${response}",nc=${ncString},cnonce=
 }
 
 if (typeof(window) === "object") window.DigestFetch = DigestClient
-module.exports = DigestClient
+export default DigestClient

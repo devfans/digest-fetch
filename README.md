@@ -9,25 +9,31 @@
 digest auth request plugin for fetch/node-fetch also supports http basic authentication
 
 ## Installation
+
+// For digest-fetch 3.x.x or above
+```
+npm install node-fetch@latest
+
+```
+
+// For digest-fetch 2.0.3 or below
 ```
 // dependencies for node
-npm install node-fetch
+npm install node-fetch@@v2
 
-// for browers, if to use it directly, please indcude file `digest-fetch.js` in a <script/> 
-<script type="application/javascript" src="path-to-digest-fetch.js'></script>
 ```
 
 ## Get Started
 
 ```
-// Use require
+// Use require for digest-fetch 2.0.3 or below
 const DigestFetch = require('digest-fetch')
 
 // Use import
-import * as DigestFetch from "digest-fetch"
+import DigestFetch from "digest-fetch"
 
-// In browser
-const DigestFetch = window.DigestFetch;
+// typescript
+import DigestFetch from 'digest-fetch'
 ```
 
 #### Http Basic Authentication
