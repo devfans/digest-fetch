@@ -11,20 +11,20 @@ digest auth request plugin for fetch/node-fetch also supports http basic authent
 ## Installation
 
 For digest-fetch 3.0.0 or above
-```
+```sh
 npm install digest-fetch@latest node-fetch@latest
 
 ```
 
 For digest-fetch 2.0.3 or below
-```
+```sh
 npm install digest-fetch@v2 node-fetch@v2
 
 ```
 
 ## Get Started
 
-```
+```js
 // Use require for digest-fetch 2.0.3 or below
 const DigestClient = require('digest-fetch')
 
@@ -43,7 +43,7 @@ Since digest-fetch becomes ES module starting 3.0.0, you need to set your projec
 - Specify ```--esm``` for ts-node like ```npx ts-node --esm src/index.ts```
 - Specify ```"module": "ESNext", "moduleResolution": "node"``` in your tsconfig.json
 
-```
+```sh
 // Install dependencies
 npm install digest-fetch@latest node-fetch@latest
 
@@ -54,7 +54,7 @@ import DigestClient from "digest-fetch"
 
 For digest-fetch 2.0.3 or below
 
-```
+```sh
 // Install dependencies
 npm install digest-fetch@v2 node-fetch@v2
 
@@ -66,7 +66,7 @@ import DigestClient from "digest-fetch"
 #### Http Basic Authentication
 Create a client using basic authentication challenge
 
-```
+```js
 const client = new DigestClient('user', 'password', { basic: true })
 client.fetch(url, options).then(res => res.json).then(console.dir)
 ```
@@ -75,18 +75,18 @@ client.fetch(url, options).then(res => res.json).then(console.dir)
 
 Create a digest authentication request client with default options
 
-```
+```js
 const client = new DigestClient('user', 'password') 
 ```
 
 Specify options for digest authentication
 
-``` 
+``` js
 const client = new DigestClient('user', 'password', { algorithm: 'MD5' }) 
 ```
 
 Supported Algorithm
-```
+```js
 ['MD5', 'MD5-sess', 'SHA-256', 'SHA-256-sess', 'SHA-512-256', 'SHA-512-256-sess']
 ```
 
@@ -107,7 +107,7 @@ Details:
 
 Do request same way as fetch or node-fetch
 
-```
+```js
 const url = ''
 const options = {}
 client.fetch(url, options)
@@ -118,7 +118,7 @@ client.fetch(url, options)
 
 Pass in refresh request options factory function for conditions options needs be refreshed when trying again.
 For example when posting with file stream:
-```
+```js
 const factory = () => ({ method: 'post', body: fs.createReadStream('path-to-file') })
 client.fetch(url, {factory})
   .then(resp=>resp.json())
