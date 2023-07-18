@@ -26,8 +26,8 @@
     "url": "git+https://github.com/devfans/digest-fetch.git"
   },
   "exports": {
-    "default": "./digest-fetch-src.js",
-    "types": "./digest-fetch-src.d.ts"
+    "types": "./digest-fetch-src.d.ts",
+    "default": "./digest-fetch-src.js"
   },
   "devDependencies": {
     "@types/node": "^18.15.11",
