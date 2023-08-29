@@ -3,7 +3,6 @@
 [![Join the chat at https://gitter.im/devfans/digest-fetch](https://badges.gitter.im/devfans/digest-fetch.svg)](https://gitter.im/devfans/digest-fetch?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
-[![Build Status][travis-image]][travis-url]
 [![Test Coverage][coveralls-image]][coveralls-url]
 
 digest auth request plugin for fetch/node-fetch also supports http basic authentication
@@ -138,8 +137,6 @@ Feel free to open PRs whenever you have better ideas on this project!
 
 [npm-image]: https://img.shields.io/npm/v/digest-fetch.svg
 [npm-url]: https://npmjs.org/package/digest-fetch
-[travis-image]: https://img.shields.io/travis/devfans/digest-fetch/master.svg
-[travis-url]: https://travis-ci.org/devfans/digest-fetch
 [coveralls-image]: https://img.shields.io/coveralls/devfans/digest-fetch/master.svg
 [coveralls-url]: https://coveralls.io/r/devfans/digest-fetch?branch=master
 [downloads-image]: https://img.shields.io/npm/dm/digest-fetch.svg
