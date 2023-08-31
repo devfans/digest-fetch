@@ -4,7 +4,7 @@
   "description": "digest auth request plugin for fetch/node-fetch also support http basic auth authentication",
   "main": "digest-fetch-src.js",
   "scripts": {
-    "lint": "eslint --plugin markdown --ext js,md .",
+    "lint": "eslint --ext js,md .",
     "test": "mocha --check-leaks --bail --no-exit --reporter spec test/digest-*",
     "test-cov": "istanbul cover node_modules/mocha/bin/_mocha -- --check-leaks --no-exit --reporter dot test/",
     "test-travis": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --check-leaks --no-exit --reporter spec test/",
