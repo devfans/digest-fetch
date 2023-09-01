@@ -29,6 +29,7 @@ export class DigestClient {
     this.nonceRaw = 'abcdef0123456789'
     this.logger = options.logger
     this.precomputedHash = options.precomputedHash
+    this._client = options.client
 
     let algorithm = options.algorithm || 'MD5'
     if (!supported_algorithms.includes(algorithm)) {
