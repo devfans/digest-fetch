@@ -53,12 +53,13 @@ export class DigestClient {
   }
 
   async getClient() {
-    if (typeof (fetch) === 'function') {
-      return fetch;
-    }
     if (this._client == undefined) {
-      const module = await import('node-fetch');
-      this._client = module.default;
+      if (typeof (fetch) === 'function') {
+        this._client = fetch
+      } else {
+        const module = await import('node-fetch');
+        this._client = module.default;
+      }
     }
     return this._client;
   }
