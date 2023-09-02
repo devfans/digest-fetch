@@ -23,11 +23,12 @@ npm install digest-fetch@v2 node-fetch@v2
 
 ## Get Started
 
+Use require for digest-fetch 2.0.3 or below
 ```js
-// Use require for digest-fetch 2.0.3 or below
 const DigestClient = require('digest-fetch')
-
-// Use import
+```
+Use import for digest-fetch 3.0.0 or above
+```js
 import DigestClient from "digest-fetch"
 
 ```
